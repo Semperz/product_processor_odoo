@@ -1,0 +1,29 @@
+<odoo>
+  <!-- Wizard para crear producto desde línea de Pre-Presupuesto -->
+  <record id="view_pre_presupuesto_line_create_wizard" model="ir.ui.view">
+    <field name="name">pre.presupuesto.line.create.product.wizard.form</field>
+    <field name="model">pre.presupuesto.line.create.product.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Crear producto para Pre-Presupuesto">
+        <group>
+          <field name="name"/>
+          <field name="categ_id"/>
+          <field name="price_unit"/>
+          <field name="uom_id"/>
+          <field name="quantity" readonly="1"/>
+        </group>
+        <footer>
+          <button 
+            string="Cancelar"
+            class="btn-secondary"
+            special="cancel"/>
+          <button 
+            string="Crear Producto"
+            type="object"
+            name="action_create_product"
+            class="btn-primary"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+</odoo>

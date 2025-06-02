@@ -1,0 +1,21 @@
+{
+    "name": "Product Processors",
+    "summary": "Hace cosas",
+    "version": "17.0.1.0.0",
+    "author": "Tu nombre / Empresa",
+    "category": "Inventory",
+    "depends": ["base",
+        "sale",
+        "product",
+        "uom",],
+    "data": [
+            'views/pre_presupuesto_views.xml',
+            'views/pre_presupuesto_wizard_views.xml',
+            'security/security.xml',
+            'security/ir.model.access.csv',
+    ],
+    "installable": True,
+    "application": False,
+    "auto_install": False,
+    "license": "LGPL-3",
+}

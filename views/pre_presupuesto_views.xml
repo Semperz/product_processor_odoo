@@ -1,0 +1,93 @@
+<odoo>
+  <!-- Formulario de Pre-Presupuesto -->
+  <record id="view_pre_presupuesto_form" model="ir.ui.view">
+    <field name="name">pre.presupuesto.form</field>
+    <field name="model">pre.presupuesto</field>
+    <field name="arch" type="xml">
+      <form string="Pre-Presupuesto">
+        <header>
+          <button 
+            name="action_check_done"
+            type="object"
+            string="Procesar y generar presupuesto"
+            class="btn-primary"
+            tattrs="{'invisible': [('state', '!=', 'pending')]}"/>
+          <field name="state" widget="statusbar" statusbar_visible="draft,pending,done"/>
+        </header>
+        <sheet>
+          <group>
+            <field name="name"/>
+            <field name="presupuesto_id"/>
+            <field name="user_id"/>
+            <field name="date_create"/>
+          </group>
+          <notebook>
+            <page string="Líneas">
+              <field name="line_ids">
+                <tree editable="bottom" string="Productos a validar">
+                  <field name="name"/>
+                  <field name="product_id"/>
+                  <field name="quantity"
+                         tattrs="{'readonly': [('state', '!=', 'to_review')]}"/>
+                  <field name="state"/>
+                  <field name="processed"/>
+                  <field name="user_action"/>
+                  <field name="date_action"/>
+                  <button 
+                    name="action_accept"
+                    type="object"
+                    icon="fa-check"
+                    string="Aceptar"
+                    tattrs="{'invisible': [('state', '!=', 'to_review')]}"/>
+                  <button 
+                    name="action_open_create_wizard"
+                    type="object"
+                    icon="fa-plus-square"
+                    string="Crear Producto"
+                    tattrs="{'invisible': [('state', '!=', 'to_review')]}"/>
+                  <button 
+                    name="action_discard"
+                    type="object"
+                    icon="fa-times"
+                    string="Descartar"
+                    tattrs="{'invisible': [('state', '!=', 'to_review')]}"/>
+                </tree>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- Lista de Pre-Presupuestos -->
+  <record id="view_pre_presupuesto_tree" model="ir.ui.view">
+    <field name="name">pre.presupuesto.tree</field>
+    <field name="model">pre.presupuesto</field>
+    <field name="arch" type="xml">
+      <tree string="Pre-Presupuestos">
+        <field name="name"/>
+        <field name="presupuesto_id"/>
+        <field name="user_id"/>
+        <field name="state"/>
+        <field name="date_create"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Acción y Menú de Pre-Presupuestos -->
+   <record id="action_pre_presupuesto" model="ir.actions.act_window">
+    <field name="name">Pre-Presupuestos</field>
+    <field name="res_model">pre.presupuesto</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p>Desde aquí validas los productos que necesitan revisión antes de pasarlos al presupuesto final.</p>
+    </field>
+  </record>
+
+   <menuitem id="menu_pre_presupuesto_root"
+            name="Pre-Presupuestos"
+            sequence="100"
+            parent="sale.sale_order_menu"
+            action="action_pre_presupuesto"/>
+</odoo>

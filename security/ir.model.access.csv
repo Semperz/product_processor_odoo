@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pre_presupuesto_user,access_pre_presupuesto_user,model_pre_presupuesto,base.group_user,1,1,1,1
+access_pre_presupuesto_line_user,access_pre_presupuesto_line_user,model_pre_presupuesto_line,base.group_user,1,1,1,1
+access_pre_presupuesto_wizard_user,access_pre_presupuesto_wizard_user,model_pre_presupuesto_line_create_product_wizard,base.group_user,1,1,1,1
