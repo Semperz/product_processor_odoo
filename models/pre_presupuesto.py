@@ -44,13 +44,6 @@ class PrePresupuesto(models.Model):
 
     @api.model
     def create_from_rpc(self, presupuesto_id, products_list):
-        """
-        Crea un pre.presupuesto y sus líneas a partir de un JSON enviado vía HTTP.
-        products_list = [
-            {"name": "...", "product_id": 12, "processed": true, "quantity": 5},
-            ...
-        ]
-        """
         # 1) Verificar que exista el presupuesto destino
         presupuesto = self.env['sale.order'].browse(presupuesto_id)
         if not presupuesto.exists():
@@ -99,10 +92,11 @@ class PrePresupuesto(models.Model):
         return pre
 
     def action_check_done(self):
-        """
-        Comprueba que todas las líneas estén procesadas y las anexa al presupuesto real,
-        fijando la fecha de validez (validity_date) a un día después de hoy.
-        """
+
+        for record in self:
+            if record.state != 'pending':
+                raise UserError(_("Este Pre-Presupuesto ya ha sido procesado o no está en estado pendiente."))
+
         for record in self:
             if any(line.state == 'to_review' for line in record.line_ids):
                 raise UserError(_("Aún hay líneas por revisar en este Pre-Presupuesto."))
@@ -126,6 +120,20 @@ class PrePresupuesto(models.Model):
                     'price_unit': product.lst_price,
                 })
             record.state = 'done'
+        
+        notif = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': "Presupuesto procesado",
+                'message': "Se ha procesado el Pre-Presupuesto y se han creado las líneas en el presupuesto destino.",
+                'type': 'success',
+                'sticky': False,
+            }
+        }
+        # 2) Abrir la vista tree de pre.presupuesto
+        
+        return notif
 
     def unlink(self):
         for pre in self:
